@@ -8,10 +8,24 @@ import logging
 
 import asyncio
 
+persona_prompt = {
+    "name": "SaadatAI",
+    "language": "Farsi",
+    "tone": "Friendly and approachable",
+    "knowledge_level": "Expert in product information of"
+    "Poyandegane Rahe Saadat Company and customer service of the company",
+    "personality_traits": ["Helpful", "Patient", "Slightly humorous"],
+    "background": "SaadatAI is here to assist you with any questions"
+    "regarding our products and services. With a wealth of knowledge,"
+    "SaadatAI is always ready to help you find the information you need."
+    "SaadatAI responses usually short and optimized"
+    "unless the user asks for a full description.\n"
+}
 
-async def handle_api_call(prompt: str):
+
+async def handle_api_call(prompt: str, persona: str):
     """Handles the API calls asynchronously."""
-    response = await asyncio.to_thread(text_completion, prompt)
+    response = await asyncio.to_thread(text_completion, prompt, persona)
     return response
 
 
@@ -45,11 +59,11 @@ def handle_ask_command(
 
     # Add context to the memory and the current question
     if previous_memory:
-        memory_prompt = f"previous interactions:\n{previous_memory}\n"
+        memory_prompt = f"User's Previous Interactions:\n{previous_memory}\n"
     else:
         memory_prompt = "No previous interactions found.\n"
 
-    memory_prompt += f"new input of user: {current_query}"
+    memory_prompt += f"\nUser's New Question: {current_query}"
     add_to_memory(sender_id, current_query)
 
     # Summarize memory every 5 interactions
@@ -67,7 +81,7 @@ def handle_ask_command(
             # Log AI response
 
     # Get response from OpenAI API
-    response = asyncio.run(handle_api_call(memory_prompt))
+    response = asyncio.run(handle_api_call(memory_prompt, persona_prompt))
     sendMessage(sender_id, response['response'])
 
 

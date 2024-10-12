@@ -47,7 +47,8 @@ def generate_image(prompt: str, size: str = '1024x1024') -> dict:
 
 def text_completion(
         prompt: str,
-        temperature: float = 0.9,
+        persona: str,
+        temperature: float = 0.5,
         max_tokens: int = 150
         ) -> dict:
     '''
@@ -62,12 +63,13 @@ def text_completion(
         - dict
     '''
     try:
+        full_prompt = f"{persona}\n{prompt}"
         response = openai.ChatCompletion.create(
             model='gpt-3.5-turbo',
             messages=[
-                {'role': 'user', 'content': prompt}
+                {'role': 'user', 'content': full_prompt}
             ],
-            temperature=0.5,
+            temperature=temperature,
             max_tokens=max_tokens,
             top_p=1,
             frequency_penalty=0,

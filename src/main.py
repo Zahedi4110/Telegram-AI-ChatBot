@@ -18,6 +18,9 @@ logging.basicConfig(
 # Initialize Flask application
 app = Flask(__name__)
 
+# Define the persona of SaadatAI
+
+
 # Global variables for interaction tracking
 interaction_count = {}
 user_last_interaction_time = {}
