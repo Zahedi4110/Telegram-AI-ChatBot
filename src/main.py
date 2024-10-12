@@ -23,7 +23,7 @@ interaction_count = {}
 user_last_interaction_time = {}
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/telegram', methods=['POST', 'GET'])
 def telegram():
     """Handles incoming messages from Telegram and responds accordingly."""
     try:
