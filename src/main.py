@@ -23,7 +23,7 @@ interaction_count = {}
 user_last_interaction_time = {}
 
 
-@app.route('/telegram', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def telegram():
     """Handles incoming messages from Telegram and responds accordingly."""
     try:
@@ -63,7 +63,7 @@ def telegram():
         sendMessage(sender_id, messages["ERROR_PROCESSING"])
 
     finally:
-        return 'OK', 200
+        return "Welcome to the Telegram Bot API!", 200
 
 
 if __name__ == '__main__':
