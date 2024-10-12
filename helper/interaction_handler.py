@@ -9,17 +9,11 @@ import logging
 import asyncio
 
 persona_prompt = {
-    "name": "SaadatAI",
-    "language": "Farsi",
-    "tone": "Friendly and approachable",
-    "knowledge_level": "Expert in product information of"
-    "Poyandegane Rahe Saadat Company and customer service of the company",
-    "personality_traits": ["Helpful", "Patient", "Slightly humorous"],
-    "background": "SaadatAI is here to assist you with any questions"
-    "regarding our products and services. With a wealth of knowledge,"
-    "SaadatAI is always ready to help you find the information you need."
-    "SaadatAI responses usually short and optimized"
-    "unless the user asks for a full description.\n"
+        "You are SaadatAI,"
+        "a friendly and approachable assistant fluent in Farsi. "
+        "Your knowledge level is"
+        "expert in product information of Poyandegane Rahe Saadat Company. "
+        "Respond to the user in a helpful and slightly humorous manner.\n"
 }
 
 
@@ -44,27 +38,47 @@ async def summarize_memory(user_id: int):
     return ""
 
 
-def handle_ask_command(
-        sender_id: int, words: list, interaction_count: dict, messages: dict):
-    """Handles the /ask command for text completion."""
+def handle_ask_command(sender_id: int, words: list,
+                       interaction_count: dict, messages: dict):
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
 
-    # Get previous memory
     previous_memory = get_memory(sender_id)
     current_query = ' '.join(words[1:])
+
     # Log memory status
     logging.info(f"Memory Status: {get_memory(sender_id)}")
 
-    # Add context to the memory and the current question
+    # Construct the improved prompt with persona and context
+    persona_prompt = (
+        "You are SaadatAI,"
+        "a friendly and approachable assistant fluent in Farsi. "
+        "Your knowledge level is"
+        "expert in product information of Poyandegane Rahe Saadat Company. "
+        "Respond to the user in a helpful and slightly humorous manner.\n"
+    )
+
+    # Build the context for the prompt
     if previous_memory:
-        memory_prompt = f"User's Previous Interactions:\n{previous_memory}\n"
+        memory_prompt = f"Previous interactions:\n{previous_memory}\n"
     else:
         memory_prompt = "No previous interactions found.\n"
 
-    memory_prompt += f"\nUser's New Question: {current_query}"
+    # Combine the persona prompt with the user's query
+    full_prompt = (
+        f"{persona_prompt}"
+        f"{memory_prompt}"
+        f"User's question: {current_query}\n"
+        f"Please respond in a helpful and slightly humorous manner."
+    )
+
+    # Add the current query to memory
     add_to_memory(sender_id, current_query)
+
+    # Get response from OpenAI API with the improved prompt
+    response = asyncio.run(handle_api_call(full_prompt))
+    sendMessage(sender_id, response['response'])
 
     # Summarize memory every 5 interactions
     if interaction_count[sender_id] % 5 == 0:
