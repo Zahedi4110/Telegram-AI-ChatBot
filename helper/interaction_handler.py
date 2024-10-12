@@ -17,7 +17,7 @@ persona_prompt = {
 }
 
 
-async def handle_api_call(prompt: str, persona: str):
+async def handle_api_call(prompt: str, persona_prompt: str):
     """Handles the API calls asynchronously."""
     response = await asyncio.to_thread(text_completion, prompt, persona_prompt)
     return response
