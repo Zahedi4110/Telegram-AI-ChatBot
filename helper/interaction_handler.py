@@ -38,8 +38,8 @@ async def summarize_memory(user_id: int):
     return ""
 
 
-def handle_ask_command(sender_id: int, words: list,
-                       interaction_count: dict, messages: dict):
+def handle_ask_command(
+        sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
@@ -53,9 +53,9 @@ def handle_ask_command(sender_id: int, words: list,
     # Construct the improved prompt with persona and context
     persona_prompt = (
         "You are SaadatAI,"
-        "a friendly and approachable assistant fluent in Farsi. "
+        " a friendly and approachable assistant fluent in Farsi. "
         "Your knowledge level is"
-        "expert in product information of Poyandegane Rahe Saadat Company. "
+        " expert in product information of Poyandegane Rahe Saadat Company. "
         "Respond to the user in a helpful and slightly humorous manner.\n"
     )
 
@@ -77,7 +77,7 @@ def handle_ask_command(sender_id: int, words: list,
     add_to_memory(sender_id, current_query)
 
     # Get response from OpenAI API with the improved prompt
-    response = asyncio.run(handle_api_call(full_prompt))
+    response = asyncio.run(handle_api_call(full_prompt, persona_prompt))  # Pass both arguments
     sendMessage(sender_id, response['response'])
 
     # Summarize memory every 5 interactions
@@ -89,10 +89,8 @@ def handle_ask_command(sender_id: int, words: list,
             sendMessage(sender_id, "Updating Memory...")
             logging.info(f"\n\n************************\nUpdated Memory:"
                          f"\n{summary}\n************************\n\n")
-
         else:
             sendMessage(sender_id, "Can't Summarize!")
-            # Log AI response
 
     # Get response from OpenAI API
     response = asyncio.run(handle_api_call(memory_prompt, persona_prompt))
