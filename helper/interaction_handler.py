@@ -39,26 +39,27 @@ async def summarize_memory(user_id: int):
 
 def handle_ask_command(sender_id: int, words: list,
                        interaction_count: dict, messages: dict):
-    """Handles user questions."""
-    if len(words) < 1:  # No query provided
+    """Handles the user's questions."""
+    if len(words) < 1:  # No query provided after command
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
 
-    previous_memory = get_memory(sender_id)
     current_query = ' '.join(words)
 
     # Log memory status
+    previous_memory = get_memory(sender_id)
     logging.info(f"Memory Status: {previous_memory}")
 
     # Build the context for the prompt
     memory_prompt = (
-        f"Previous interactions:\n{previous_memory}\n" if previous_memory
-        else "No previous interactions found.\n"
+        f"Previous interactions:\n{previous_memory}\n"
+        if previous_memory else "No previous interactions found.\n"
     )
 
     # Combine the persona prompt with the user's query
     full_prompt = (
         f"{persona_prompt}{memory_prompt}User's question: {current_query}\n"
+        "Please respond in a helpful and slightly humorous manner."
     )
 
     # Add the current query to memory
@@ -70,14 +71,14 @@ def handle_ask_command(sender_id: int, words: list,
 
     # Summarize memory every 5 interactions
     if interaction_count[sender_id] % 5 == 0:
-        summary = asyncio.run(summarize_memory(sender_id))
+        summary = summarize_memory(sender_id)
         if summary:
             clear_memory(sender_id)  # Clear the user's memory
             add_to_memory(sender_id, summary)  # Add summarized memory
-            sendMessage(sender_id, "Updating Memory...")
+            sendMessage(sender_id, "Memory updated.")
             logging.info(f"Updated Memory:\n{summary}")
         else:
-            sendMessage(sender_id, "Can't Summarize!")
+            sendMessage(sender_id, "Can't summarize!")
 
 
 def handle_img_command(sender_id: int, words: list, messages: dict):
