@@ -38,7 +38,7 @@ def cleanup_memory(user_id: int) -> None:
             clear_memory(user_id)  # Clear memory if empty
 
 
-def summarize_memory(user_id: int) -> str:
+async def summarize_memory(user_id: int) -> str:
     """Summarizes the user's memory and returns a concise version."""
     cleanup_memory(user_id)  # Ensure cleanup before summarizing
     messages = [msg[0] for msg in memory_buffer.get(user_id, [])]

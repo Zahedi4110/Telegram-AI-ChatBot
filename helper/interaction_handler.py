@@ -37,8 +37,8 @@ async def summarize_memory(user_id: int):
     return ""
 
 
-def handle_ask_command(sender_id: int, words: list,
-                       interaction_count: dict, messages: dict):
+async def handle_ask_command(
+        sender_id: int, words: list, interaction_count: dict, messages: dict):
     """Handles the user's questions."""
     if len(words) < 1:  # No query provided after command
         sendMessage(sender_id, messages["ASK_PROMPT"])
@@ -66,12 +66,12 @@ def handle_ask_command(sender_id: int, words: list,
     add_to_memory(sender_id, current_query)
 
     # Get response from OpenAI API with the improved prompt
-    response = asyncio.run(handle_api_call(full_prompt, persona_prompt))
+    response = await handle_api_call(full_prompt, persona_prompt)
     sendMessage(sender_id, response['response'])
 
     # Summarize memory every 5 interactions
     if interaction_count[sender_id] % 5 == 0:
-        summary = summarize_memory(sender_id)
+        summary = await summarize_memory(sender_id)  # Await the summary
         if summary:
             clear_memory(sender_id)  # Clear the user's memory
             add_to_memory(sender_id, summary)  # Add summarized memory
