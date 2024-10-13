@@ -27,7 +27,7 @@ user_last_interaction_time = {}
 
 
 @app.route('/telegram', methods=['POST', 'GET'])
-def telegram():
+async def telegram():
     """Handles incoming messages from Telegram and responds accordingly."""
     try:
         data = request.get_json()
@@ -50,13 +50,14 @@ def telegram():
         logging.info(f"Num OF Interaction: {interaction_count}")
 
         if words[0] == '/ask':
-            handle_ask_command(sender_id, words, interaction_count, messages)
+            await handle_ask_command(
+                sender_id, words, interaction_count, messages)
 
         elif words[0] == '/img':
-            handle_img_command(sender_id, words, messages)
+            await handle_img_command(sender_id, words, messages)
 
         elif words[0] == '/clean':
-            handle_clean_command(sender_id, messages)
+            await handle_clean_command(sender_id, messages)
 
         else:
             sendMessage(sender_id, messages["UNRECOGNIZED_COMMAND"])

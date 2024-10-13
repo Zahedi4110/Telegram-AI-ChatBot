@@ -38,7 +38,8 @@ async def summarize_memory(user_id: int):
     return ""
 
 
-def handle_ask_command(sender_id: int, words: list, interaction_count: dict, messages: dict):
+def handle_ask_command(
+    sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
