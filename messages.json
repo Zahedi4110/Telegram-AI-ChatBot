@@ -1,11 +1,9 @@
 {
     "CLEAN_START": "For A Clean Start Click On: /clean",
     "ASK_PROMPT": "Please ask your Question with /ask\nOr create an Image with /img",
-    "ERROR_PROCESSING": "An Error Happend! :(",
+    "ERROR_PROCESSING": "An Error Happened! :(",
     "MEMORY_CLEARED": "Memory Cleared",
     "NO_CONVERSATION": "No conversation to clean",
-    "UNRECOGNIZED_COMMAND": "Please Ask Your Question With /ask\nCreate An Image With /img\nOr Start A New Conversation With /clean",
-    "DEFAULT_UNRECOGNIZED": "Default message unrecognized",
+    "UNRECOGNIZED_COMMAND": "Please Ask Your Question or Create An Image With /img\nOr Start A New Conversation With /clean",
     "DEFAULT_IMAGE_RESPONSE": "Use /clean to start a new conversation"
-
 }
