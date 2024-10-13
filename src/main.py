@@ -3,7 +3,7 @@
 import logging
 import json
 import time
-from flask import Flask, request
+from quart import Quart, request  # Import Quart instead of Flask
 from helper.interaction_handler import handle_ask_command, handle_img_command
 from helper.interaction_handler import handle_clean_command
 from helper.telegram_api import sendMessage
@@ -16,8 +16,8 @@ with open('messages.json', 'r', encoding='utf-8') as f:
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Initialize Flask application
-app = Flask(__name__)
+# Initialize Quart application
+app = Quart(__name__)
 
 # Global variables for interaction tracking
 interaction_count = {}
@@ -26,10 +26,10 @@ processing_flags = {}  # To track if a user is currently being processed
 
 
 @app.route('/telegram', methods=['POST', 'GET'])
-def telegram():
+async def telegram():
     """Handles incoming messages from Telegram and responds accordingly."""
     try:
-        data = request.get_json()
+        data = await request.get_json()  # Use await to get JSON data
         message = data['message']
         query = message['text'].strip()  # Strip leading/trailing whitespace
         sender_id = message['from']['id']
@@ -56,16 +56,18 @@ def telegram():
         logging.info(f"Num OF Interaction: {interaction_count}")
 
         # Command processing logic
+        words = query.split(' ')
         if query.startswith('/img'):
-            words = query.split(' ')
-            handle_img_command(sender_id, words, messages)
+            await handle_img_command(
+                sender_id, words, messages)  # Await async function
         elif query.startswith('/clean'):
-            words = query.split(' ')
-            handle_clean_command(sender_id, messages)
+            await handle_clean_command(
+                sender_id, messages)  # Await async function
         else:
             # Treat any other input as a question for handle_ask_command
-            words = query.split(' ')
-            handle_ask_command(sender_id, words, interaction_count, messages)
+            await handle_ask_command(
+                sender_id, words, interaction_count, messages)
+                    # Await async function
 
     except Exception as e:
         logging.error(f"Error in processing: {e}")
