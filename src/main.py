@@ -3,7 +3,7 @@
 import logging
 import json
 import time
-from flask import Flask, request
+#from flask import Flask, request
 from helper.interaction_handler import handle_ask_command
 from helper.interaction_handler import handle_img_command, handle_clean_command
 from helper.telegram_api import sendMessage
