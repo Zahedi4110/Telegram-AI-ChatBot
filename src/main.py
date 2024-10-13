@@ -32,7 +32,7 @@ def telegram():
     try:
         data = request.get_json()
         message = data['message']
-        query = message['text']
+        query = message['text'].strip()  # Strip any leading/trailing whitespace
         sender_id = message['from']['id']
 
         # Initialize interaction count if not present
@@ -43,31 +43,25 @@ def telegram():
         interaction_count[sender_id] += 1
         user_last_interaction_time[sender_id] = time.time()
 
-        # Split the message into words for command processing
-        words = query.split(' ')
         # Log user input
         logging.info(f"User Input: {query}")
         logging.info(f"Num OF Interaction: {interaction_count}")
 
-        if words[0] == '/ask':
-            handle_ask_command(sender_id, words, interaction_count, messages)
-
-        elif words[0] == '/img':
+        # Check for commands
+        if query.startswith('/img'):
+            words = query.split(' ')
             handle_img_command(sender_id, words, messages)
-
-        elif words[0] == '/clean':
-            handle_clean_command(sender_id, messages)
-
+        elif query.startswith('/clean'):
+            words = query.split(' ')
+            handle_clean_command(sender_id, words, messages)
         else:
-            sendMessage(sender_id, messages["UNRECOGNIZED_COMMAND"])
+            # Treat any other input as a question for handle_ask_command
+            words = query.split(' ')
+            handle_ask_command(sender_id, words, interaction_count, messages)
 
     except Exception as e:
         logging.error(f"Error in processing: {e}")
         sendMessage(sender_id, messages["ERROR_PROCESSING"])
 
-    finally:
-        return "Welcome to the Telegram Bot API!", 200
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    if __name__ == '__main__':
+        app.run(debug=True)
