@@ -12,7 +12,6 @@ def add_to_memory(user_id: int, message: str) -> None:
     if user_id not in memory_buffer:
         memory_buffer[user_id] = []
     memory_buffer[user_id].append((message, time.time()))
-    cleanup_memory(user_id)  # Clean up memory after adding
 
 
 def clear_memory(user_id: int) -> None:
@@ -22,7 +21,7 @@ def clear_memory(user_id: int) -> None:
 
 def get_memory(user_id: int) -> str:
     """Retrieves the user's memory as a concatenated string."""
-    cleanup_memory(user_id)  # Ensure cleanup before retrieval
+    cleanup_memory(user_id)
     return "\n".join([msg[0] for msg in memory_buffer.get(user_id, [])])
 
 
@@ -35,16 +34,4 @@ def cleanup_memory(user_id: int) -> None:
             if current_time - timestamp < MESSAGE_EXPIRATION
         ]
         if not memory_buffer[user_id]:
-            clear_memory(user_id)  # Clear memory if empty
-
-
-async def summarize_memory(user_id: int) -> str:
-    """Summarizes the user's memory and returns a concise version."""
-    cleanup_memory(user_id)  # Ensure cleanup before summarizing
-    messages = [msg[0] for msg in memory_buffer.get(user_id, [])]
-    if messages:
-        # Create a summary based on the last few messages
-        summary = "Summary of previous interactions:\n" + "\n".join(
-            messages[-3:])
-        return summary
-    return ""
+            clear_memory(user_id)
