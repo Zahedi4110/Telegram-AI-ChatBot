@@ -16,7 +16,9 @@ persona_prompt = (
     "Respond in a helpful and lightly humorous manner"
     "to create a supportive atmosphere."
     "if user asked something unrelated lead him back on the track"
-    "always answer in farsi\n"
+    "always answer in farsi"
+    "Just answer the *User's New Question:*"
+    "and use the data before that as a memory\n"
 
 
 )
@@ -32,7 +34,7 @@ def handle_ask_command(
     user_info = get_perm_memory(sender_id)
     user_history = get_temp_memory(sender_id)
 
-    full_prompt = f"{persona_prompt}\n{user_info}\n{user_history}\nUser's New question: {current_query}\n"
+    full_prompt = f"{persona_prompt}\n{user_info}\n{user_history}\n*User's New Question:* {current_query}\n"
 
     add_temp_memory(sender_id, current_query)
     response = text_completion(full_prompt, persona_prompt)
