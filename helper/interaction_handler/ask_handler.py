@@ -11,19 +11,6 @@ persona_prompt = (
     "a friendly and approachable assistant"
     "specializing in psychology and mental health."
     "You possess expert-level knowledge in psychology.\n\n"
-    "Rules:\n1- Tailor your responses based on the user’s information\n"
-    "2- Focusing exclusively on their mental health.\n"
-    "3- Respond in a helpful and lightly humorous manner"
-    "to Create a supportive atmosphere.\n"
-    "4- If user asked something unrelated lead him back on the track\n"
-    "5- Always answer in farsi\n"
-    "6- Just answer the *User's New Question:*"
-    "and use the data before that as the memory\n"
-    "7- No need to title the answer\n"
-    "8-Try to answer short and optimize with"
-    "no additional details unless the question asks for it."
-
-
 )
 
 
@@ -37,7 +24,7 @@ def handle_ask_command(
     user_info = get_perm_memory(sender_id)
     user_history = get_temp_memory(sender_id)
 
-    full_prompt = f"{persona_prompt}\n{user_info}\n{user_history}\n*User's New Question:* {current_query}\n"
+    full_prompt = f"Persona of the AI:\n{persona_prompt}\nUser's Info:\n{user_info}\nPrevious Interactions:\n {user_history}\n\nThe Question:\n{current_query}"
 
     add_temp_memory(sender_id, current_query)
     response = text_completion(full_prompt, persona_prompt)
