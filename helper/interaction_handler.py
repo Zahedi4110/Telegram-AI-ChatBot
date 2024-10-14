@@ -5,7 +5,6 @@ from helper.telegram_api import sendMessage, sendPhoto
 from helper.memory import add_to_memory, get_memory
 from helper.memory import clear_memory  # cleanup_memory
 import logging
-
 import asyncio
 
 persona_prompt = {
@@ -16,12 +15,10 @@ persona_prompt = {
         "Respond to the user in a helpful and slightly humorous manner.\n"
 }
 
-
 async def handle_api_call(prompt: str, persona_prompt: str):
     """Handles the API calls asynchronously."""
     response = await asyncio.to_thread(text_completion, prompt, persona_prompt)
     return response
-
 
 async def summarize_memory(user_id: int):
     """Summarizes the user's memory using OpenAI API."""
@@ -37,9 +34,7 @@ async def summarize_memory(user_id: int):
         return summary_response['response']
     return ""
 
-
-def handle_ask_command(
-    sender_id: int, words: list, interaction_count: dict, messages: dict):
+def handle_ask_command(sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
@@ -96,7 +91,6 @@ def handle_ask_command(
     response = asyncio.run(handle_api_call(memory_prompt, persona_prompt))
     sendMessage(sender_id, response['response'])
 
-
 def handle_img_command(sender_id: int, words: list, messages: dict):
     """Handles the /img command for image generation."""
     if len(words) < 2:  # No query provided after /img
@@ -115,7 +109,6 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
         sendMessage(sender_id, response['url'])
 
     sendMessage(sender_id, messages["DEFAULT_IMAGE_RESPONSE"])
-
 
 def handle_clean_command(sender_id: int, messages: dict):
     """Handles the /clean command to clear user memory."""

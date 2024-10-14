@@ -6,7 +6,6 @@ load_dotenv()
 # Use your API key
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-
 def generate_image(prompt: str, size: str = '1024x1024') -> dict:
     '''
     Call OpenAI API for image generation
@@ -43,7 +42,6 @@ def generate_image(prompt: str, size: str = '1024x1024') -> dict:
             'status': 0,
             'url': 'Something went wrong (img)'
         }
-
 
 def text_completion(
         prompt: str,
