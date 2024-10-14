@@ -1,3 +1,5 @@
+# helper/openai_api.py
+
 import os
 import openai
 from dotenv import load_dotenv
@@ -6,7 +8,6 @@ load_dotenv()
 
 # Use your API key
 openai.api_key = os.getenv('OPENAI_API_KEY')
-
 
 def generate_image(prompt: str, size: str = '1024x1024') -> dict:
     """Call OpenAI API for image generation."""
@@ -28,14 +29,12 @@ def generate_image(prompt: str, size: str = '1024x1024') -> dict:
             'url': 'Something went wrong (img)'
         }
 
-
-def text_completion(
-        prompt: str, persona: str, temperature: float = 0.9, max_tokens: int = 150) -> dict:
+def text_completion(prompt: str, persona: str, temperature: float = 0.9, max_tokens: int = 150) -> dict:
     """Call OpenAI API for text completion using chat endpoint."""
     try:
         full_prompt = f"{persona}\n{prompt}"
         response = openai.ChatCompletion.create(
-            model='gpt-4o',
+            model='gpt-3.5-turbo',
             messages=[{'role': 'user', 'content': full_prompt}],
             temperature=temperature,
             max_tokens=max_tokens,

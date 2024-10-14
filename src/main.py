@@ -7,16 +7,15 @@ from flask import Flask, request
 from helper.interaction_handler import (handle_ask_command,
                                          handle_img_command,
                                          handle_clean_command,
-                                         handle_info_command)  # Import handle_info_command
-from helper.telegram_api import sendMessage
+                                         handle_info_command)
+from helper.telegram_api import send_message
 
 # Load messages from JSON file
 with open('messages.json', 'r', encoding='utf-8') as f:
     messages = json.load(f)
 
 # Initialize logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -56,18 +55,17 @@ def telegram():
         elif words[0] == '/clean':
             handle_clean_command(sender_id, messages)
 
-        elif words[0] == '/info':  # Check for /info command
+        elif words[0] == '/info':
             handle_info_command(sender_id, words, messages)
 
         else:
-            sendMessage(sender_id, messages["UNRECOGNIZED_COMMAND"])
+            send_message(sender_id, messages["UNRECOGNIZED_COMMAND"])
 
     except Exception as e:
         logging.error(f"Error in processing: {e}")
-        sendMessage(sender_id, messages["ERROR_PROCESSING"])
+        send_message(sender_id, messages["ERROR_PROCESSING"])
 
     return "Welcome to the Telegram Bot API!", 200
-
 
 if __name__ == '__main__':
     app.run(debug=True)
