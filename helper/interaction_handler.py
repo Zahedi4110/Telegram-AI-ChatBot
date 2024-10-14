@@ -51,7 +51,6 @@ def handle_user_message(sender_id: int, message: str, messages: dict):
         set_info_mode(sender_id, False)  # Exit info mode
     else:
         add_temp_memory(sender_id, message)  # Store temporary messages
-        handle_other_commands(sender_id, message, messages)
 
 
 def handle_ask_command(
