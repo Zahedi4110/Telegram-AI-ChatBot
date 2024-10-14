@@ -7,7 +7,6 @@ from helper.memory import clear_memory  # cleanup_memory
 import logging
 import asyncio
 
-
 persona_prompt = {
         "You are SaadatAI,"
         "a friendly and approachable assistant fluent in Farsi. "
@@ -16,12 +15,10 @@ persona_prompt = {
         "Respond to the user in a helpful and slightly humorous manner.\n"
 }
 
-
 async def handle_api_call(prompt: str, persona_prompt: str):
     """Handles the API calls asynchronously."""
     response = await asyncio.to_thread(text_completion, prompt, persona_prompt)
     return response
-
 
 async def summarize_memory(user_id: int):
     """Summarizes the user's memory using OpenAI API."""
@@ -37,53 +34,62 @@ async def summarize_memory(user_id: int):
         return summary_response['response']
     return ""
 
-
-async def handle_ask_command(
-        sender_id: int, words: list, interaction_count: dict, messages: dict):
-    """
-    Handles the /ask command for user queries.
-
-    Parameters:
-        - sender_id: ID of the user sending the message (int)
-        - words: List of words in the user's message (list)
-        - interaction_count: Dictionary tracking user interactions (dict)
-        - messages: Dictionary containing predefined messages (dict)
-    """
-    logging.info(f"Handling /ask command for user {sender_id} with words: {words}")
-
+def handle_ask_command(sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
 
-    current_query = ' '.join(words[1:])  # Join the user's query
-    logging.info(f"Current Query: {current_query}")
+    previous_memory = get_memory(sender_id)
+    current_query = ' '.join(words[1:])
+
+    # Log memory status
+    logging.info(f"Memory Status: {get_memory(sender_id)}")
+
+    # Construct the improved prompt with persona and context
+    persona_prompt = (
+        "You are SaadatAI,"
+        " a friendly and approachable assistant fluent in Farsi. "
+        "Your knowledge level is"
+        " expert in product information of Poyandegane Rahe Saadat Company. "
+        "Respond to the user in a helpful and slightly humorous manner.\n"
+    )
+
+    # Build the context for the prompt
+    if previous_memory:
+        memory_prompt = f"Previous interactions:\n{previous_memory}\n"
+    else:
+        memory_prompt = "No previous interactions found.\n"
+
+    # Combine the persona prompt with the user's query
+    full_prompt = (
+        f"{persona_prompt}"
+        f"{memory_prompt}"
+        f"User's question: {current_query}\n"
+        f"Please respond in a helpful and slightly humorous manner."
+    )
 
     # Add the current query to memory
     add_to_memory(sender_id, current_query)
 
-    # Construct the prompt for OpenAI API
-    persona_prompt = (
-        "You are SaadatAI, a friendly and approachable assistant fluent in Farsi. "
-        "Your knowledge level is expert in product information of Poyandegane Rahe Saadat Company. "
-        "Respond to the user in a helpful and slightly humorous manner.\n"
-    )
-    full_prompt = f"User's question: {current_query}"
+    # Get response from OpenAI API with the improved prompt
+    response = asyncio.run(handle_api_call(full_prompt, persona_prompt))  # Pass both arguments
+    sendMessage(sender_id, response['response'])
 
-    try:
-        # Get response from OpenAI API
-        response = await asyncio.to_thread(
-            text_completion, full_prompt, persona_prompt)
+    # Summarize memory every 5 interactions
+    if interaction_count[sender_id] % 5 == 0:
+        summary = asyncio.run(summarize_memory(sender_id))
+        if summary:
+            clear_memory(sender_id)  # Clear the user's memory
+            add_to_memory(sender_id, summary)  # Add summarized memory
+            sendMessage(sender_id, "Updating Memory...")
+            logging.info(f"\n\n************************\nUpdated Memory:"
+                         f"\n{summary}\n************************\n\n")
+        else:
+            sendMessage(sender_id, "Can't Summarize!")
 
-        # Log the response before sending
-        logging.info(f"Response from OpenAI: {response['response']}")
-
-        # Send the response to the user
-        sendMessage(sender_id, response['response'])
-
-    except Exception as e:
-        logging.error(f"Error while handling /ask command: {e}")
-        sendMessage(sender_id, messages["ERROR_PROCESSING"])
-
+    # Get response from OpenAI API
+    response = asyncio.run(handle_api_call(memory_prompt, persona_prompt))
+    sendMessage(sender_id, response['response'])
 
 def handle_img_command(sender_id: int, words: list, messages: dict):
     """Handles the /img command for image generation."""
@@ -103,7 +109,6 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
         sendMessage(sender_id, response['url'])
 
     sendMessage(sender_id, messages["DEFAULT_IMAGE_RESPONSE"])
-
 
 def handle_clean_command(sender_id: int, messages: dict):
     """Handles the /clean command to clear user memory."""
