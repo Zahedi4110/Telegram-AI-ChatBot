@@ -29,3 +29,4 @@ def handle_user_message(sender_id: int, message: str, messages: dict):
     else:
         send_message(
             sender_id, "Error!\nYour info did not recorded!")
+

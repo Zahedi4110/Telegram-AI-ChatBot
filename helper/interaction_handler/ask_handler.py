@@ -17,7 +17,7 @@ persona_prompt = (
 def handle_ask_command(
         sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:
-        send_message(sender_id, messages["ASK_PROMPT"])
+        send_message(sender_id, messages["Len<2"])
         return
 
     current_query = ' '.join(words[1:])
