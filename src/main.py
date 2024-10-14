@@ -4,10 +4,8 @@ import logging
 import json
 import time
 from flask import Flask, request
-from helper.interaction_handler import (handle_ask_command,
-                                         handle_img_command,
-                                         handle_clean_command,
-                                         handle_info_command)
+from helper.interaction_handler import (
+    handle_ask_command, handle_img_command, handle_clean_command, handle_info_command)
 from helper.telegram_api import send_message
 
 # Load messages from JSON file
@@ -15,7 +13,8 @@ with open('messages.json', 'r', encoding='utf-8') as f:
     messages = json.load(f)
 
 # Initialize logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -66,6 +65,7 @@ def telegram():
         send_message(sender_id, messages["ERROR_PROCESSING"])
 
     return "Welcome to the Telegram Bot API!", 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)

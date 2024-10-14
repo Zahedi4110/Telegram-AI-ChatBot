@@ -9,6 +9,7 @@ load_dotenv()
 # Use your API key
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+
 def generate_image(prompt: str, size: str = '1024x1024') -> dict:
     """Call OpenAI API for image generation."""
     try:
@@ -29,7 +30,12 @@ def generate_image(prompt: str, size: str = '1024x1024') -> dict:
             'url': 'Something went wrong (img)'
         }
 
-def text_completion(prompt: str, persona: str, temperature: float = 0.9, max_tokens: int = 150) -> dict:
+
+def text_completion(
+        prompt: str,
+        persona: str,
+        temperature: float = 0.9,
+        max_tokens: int = 150) -> dict:
     """Call OpenAI API for text completion using chat endpoint."""
     try:
         full_prompt = f"{persona}\n{prompt}"

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
 
+
 def send_message(chat_id: int, message: str) -> None:
     """Sends a message to a user via Telegram."""
     url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage"
@@ -16,6 +17,7 @@ def send_message(chat_id: int, message: str) -> None:
     }
     headers = {"Content-Type": "application/json"}
     requests.request("POST", url, json=payload, headers=headers)
+
 
 def send_photo(chat_id: int, photo_url: str, caption: str = '') -> None:
     """Sends a photo to a user via Telegram."""
