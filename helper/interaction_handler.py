@@ -71,8 +71,7 @@ def handle_ask_command(
     # Combine the persona prompt with the user's query
     full_prompt = (
         f"{persona_prompt}\n{user_info}\n{user_history}\n"
-        f"User's question: {current_query}\n"
-        "Please respond in a helpful and slightly humorous manner."
+        f"User's question: {current_query}"
     )
 
     # Add the current query to temporary memory
