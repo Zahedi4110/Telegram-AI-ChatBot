@@ -42,10 +42,8 @@ def telegram():
 
         logging.info(f"User Input: {query}")
 
-        if query.startswith('/ask'):
-            handle_ask_command(
-                sender_id, query.split(), interaction_count, messages)
-        elif query.startswith('/img'):
+
+        if query.startswith('/img'):
             handle_img_command(sender_id, query.split(), messages)
         elif query.startswith('/clean'):
             handle_clean_command(sender_id, messages)
