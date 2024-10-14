@@ -9,6 +9,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 openai.api_key = OPENAI_API_KEY
 
+
 def text_completion(prompt: str, persona_prompt: str) -> dict:
     """Generates a text completion from OpenAI's API."""
     try:
@@ -22,6 +23,7 @@ def text_completion(prompt: str, persona_prompt: str) -> dict:
         return {'response': response['choices'][0]['message']['content']}
     except Exception as e:
         return {'error': str(e)}
+
 
 def generate_image(prompt: str) -> dict:
     """Generates an image based on the prompt using OpenAI's API."""

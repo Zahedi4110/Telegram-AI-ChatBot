@@ -28,4 +28,4 @@ def handle_user_message(sender_id: int, message: str, messages: dict):
         set_info_mode(sender_id, False)
     else:
         send_message(
-            sender_id, "Not recognized. Use /ask, /img, /info, or /clean.")
+            sender_id, "Error!\nYour info did not recorded!")

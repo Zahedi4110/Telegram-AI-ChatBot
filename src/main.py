@@ -14,7 +14,8 @@ with open('messages.json', 'r', encoding='utf-8') as f:
     messages = json.load(f)
 
 # Initialize logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -22,6 +23,7 @@ app = Flask(__name__)
 # Global variables for interaction tracking
 interaction_count = {}
 user_last_interaction_time = {}
+
 
 @app.route('/telegram', methods=['POST', 'GET'])
 def telegram():
@@ -59,6 +61,7 @@ def telegram():
         send_message(sender_id, messages["ERROR_PROCESSING"])
 
     return "Welcome to the Telegram Bot API!", 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
