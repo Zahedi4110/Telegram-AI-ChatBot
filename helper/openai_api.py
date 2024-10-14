@@ -2,9 +2,7 @@
 
 from helper.openai_api import text_completion, generate_image
 from helper.telegram_api import send_message, send_photo
-from helper.memory import (add_temp_memory, get_temp_memory,
-                            clear_temp_memory, add_perm_memory,
-                            get_perm_memory, summarize_memory)
+from helper.memory import (add_temp_memory, get_temp_memory, clear_temp_memory, add_perm_memory, get_perm_memory, summarize_memory)
 import logging
 
 # State management for user info mode
@@ -12,7 +10,7 @@ info_mode = {}
 
 # Persona prompt for the AI
 persona_prompt = (
-        "Your name is *Soulsupport*,"
+    "Your name is *Soulsupport*,"
     "a friendly and approachable assistant"
     "specializing in psychology and mental health."
     "You possess expert-level knowledge in psychology."
@@ -26,34 +24,43 @@ persona_prompt = (
 
 )
 
+
 def set_info_mode(sender_id: int, mode: bool):
     """Sets the user info mode for the given sender_id."""
     info_mode[sender_id] = mode
+
 
 def is_info_mode(sender_id: int) -> bool:
     """Checks if the user info mode is active for the given sender_id."""
     return info_mode.get(sender_id, False)
 
+
 def handle_info_command(sender_id: int, words: list, messages: dict):
     """Handles the /info command for collecting user information."""
-    send_message(sender_id, "Please insert the information about yourself "
-                           "for better understanding of the AI and better responses.")
+    send_message(sender_id, "Please insert your info "
+                            "for better understanding")
     set_info_mode(sender_id, True)  # Enable info mode
+
 
 def handle_user_message(sender_id: int, message: str, messages: dict):
     """Handles user messages and stores user info if in info mode."""
     if is_info_mode(sender_id):  # Check if the user is in info mode
         # Store the user's message as permanent info
         add_perm_memory(sender_id, message)
-        send_message(sender_id, "Thank you! Your information has been recorded.")
+        send_message(
+            sender_id, "Your information has been recorded.")
         set_info_mode(sender_id, False)  # Exit info mode
     else:
         add_temp_memory(sender_id, message)  # Store temporary messages
-        send_message(sender_id, "Command not recognized. Please use /ask, /img, /info, or /clean.")
+        send_message(
+            sender_id, "Command not recognized."
+            "Please use /ask, /img, /info, or /clean.")
 
-def handle_ask_command(sender_id: int, words: list, interaction_count: dict, messages: dict):
+
+def handle_ask_command(
+        sender_id: int, words: list, interaction_count: dict, messages: dict):
     """Handles the /ask command for user queries."""
-    
+
     if len(words) < 2:  # No query provided after /ask
         send_message(sender_id, messages["ASK_PROMPT"])
         return
@@ -80,7 +87,8 @@ def handle_ask_command(sender_id: int, words: list, interaction_count: dict, mes
 
     # Summarize temporary memory every 5 interactions
     if interaction_count[sender_id] % 5 == 0:
-        summary = summarize_memory(sender_id)  # Ensure this function is defined
+        summary = summarize_memory(sender_id)  
+        # Ensure this function is defined
         if summary:
             clear_temp_memory(sender_id)  # Clear the user's temporary memory
             add_temp_memory(sender_id, summary)  # Add summarized memory
@@ -88,6 +96,7 @@ def handle_ask_command(sender_id: int, words: list, interaction_count: dict, mes
             logging.info(f"Updated Memory:\n{summary}\n")
         else:
             send_message(sender_id, "Can't summarize memory!")
+
 
 def handle_img_command(sender_id: int, words: list, messages: dict):
     """Handles the /img command for image generation."""
@@ -111,11 +120,13 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
 
     send_message(sender_id, messages["DEFAULT_IMAGE_RESPONSE"])
 
+
 def handle_clean_command(sender_id: int, messages: dict):
     """Handles the /clean command to clear user memory."""
     previous_memory = get_temp_memory(sender_id)
     if previous_memory:
-        send_message(sender_id, f"Summary of cleared memory:\n{previous_memory}")
+        send_message(
+            sender_id, f"Summary of cleared memory:\n{previous_memory}")
         clear_temp_memory(sender_id)
         send_message(sender_id, messages["MEMORY_CLEARED"])
     else:

@@ -1,4 +1,4 @@
-# helper/telegram_api.py
+# Helper/telegram_api.py
 
 import os
 import requests
@@ -9,7 +9,6 @@ TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
 
 
 def send_message(chat_id: int, message: str) -> None:
-    """Sends a message to a user via Telegram."""
     url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage"
     payload = {
         "chat_id": chat_id,
@@ -20,7 +19,6 @@ def send_message(chat_id: int, message: str) -> None:
 
 
 def send_photo(chat_id: int, photo_url: str, caption: str = '') -> None:
-    """Sends a photo to a user via Telegram."""
     url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendPhoto"
     payload = {
         "chat_id": chat_id,
