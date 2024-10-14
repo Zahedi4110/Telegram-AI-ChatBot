@@ -6,7 +6,8 @@ import time
 from flask import Flask, request
 from helper.interaction_handler import (handle_ask_command,
                                          handle_img_command,
-                                         handle_clean_command)
+                                         handle_clean_command,
+                                         handle_info_command)  # Import handle_info_command
 from helper.telegram_api import sendMessage
 
 # Load messages from JSON file
@@ -54,6 +55,9 @@ def telegram():
 
         elif words[0] == '/clean':
             handle_clean_command(sender_id, messages)
+
+        elif words[0] == '/info':  # Check for /info command
+            handle_info_command(sender_id, words, messages)
 
         else:
             sendMessage(sender_id, messages["UNRECOGNIZED_COMMAND"])

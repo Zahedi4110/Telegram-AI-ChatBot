@@ -10,25 +10,33 @@ user_info_mode = {}  # Dictionary to track user states
 
 # Persona prompt for the AI
 persona_prompt = (
-    "You are SaadatAI, a friendly and approachable assistant fluent in Farsi. "
-    "Your knowledge level is expert in product information of Poyandegane Rahe "
-    "Saadat Company. Respond to the user in a helpful and slightly humorous "
-    "manner.\n"
+    "Your name is *Soulsupport*,"
+    "a friendly and approachable assistant"
+    "specializing in psychology and mental health."
+    "You possess expert-level knowledge in psychology."
+    "Tailor your responses based on the user’s information,"
+    "focusing exclusively on their mental health."
+    "Respond in a helpful and lightly humorous manner"
+    "to create a supportive atmosphere.\n"
 )
+
 
 def set_user_info_mode(sender_id: int, mode: bool):
     """Sets the user info mode for the given sender_id."""
     user_info_mode[sender_id] = mode
 
+
 def is_user_info_mode(sender_id: int) -> bool:
     """Checks if the user info mode is active for the given sender_id."""
     return user_info_mode.get(sender_id, False)
+
 
 def handle_info_command(sender_id: int, words: list, messages: dict):
     """Handles the /info command for collecting user information."""
     sendMessage(sender_id, "Please insert the information about yourself "
                            "for better understanding of the AI and better responses.")
     set_user_info_mode(sender_id, True)  # Enable info mode
+
 
 def handle_user_message(sender_id: int, message: str, messages: dict):
     """Handles user messages and stores user info if in info mode."""
@@ -39,9 +47,11 @@ def handle_user_message(sender_id: int, message: str, messages: dict):
     else:
         handle_other_commands(sender_id, message, messages)
 
-def handle_ask_command(sender_id: int, words: list, interaction_count: dict, messages: dict):
+
+def handle_ask_command(
+        sender_id: int, words: list, interaction_count: dict, messages: dict):
     """Handles the /ask command for user queries."""
-    
+
     if len(words) < 2:  # No query provided after /ask
         sendMessage(sender_id, messages["ASK_PROMPT"])
         return
