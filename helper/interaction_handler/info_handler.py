@@ -21,8 +21,11 @@ def handle_info_command(sender_id: int, words: list, messages: dict):
     user_info = ' '.join(words[1:])
     clear_temp_memory(sender_id)
 
+    # اضافه کردن پرامپت برای خلاصه‌سازی
+    prompt = f"Summarize and store key points: {user_info}"
+
     # ارسال اطلاعات جدید به OpenAI
-    summary_response = text_completion(user_info)
+    summary_response = text_completion(prompt)
     add_perm_memory(sender_id, summary_response['response'])
 
     send_message(sender_id, "اطلاعات شما ثبت شد.")
