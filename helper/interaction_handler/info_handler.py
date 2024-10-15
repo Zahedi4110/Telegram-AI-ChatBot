@@ -15,7 +15,7 @@ def is_info_mode(sender_id: int) -> bool:
 
 def handle_info_command(sender_id: int, words: list, messages: dict):
     if len(words) < 2:
-        send_message(sender_id, "لطفاً اطلاعات را بعد از /info وارد کنید.")
+        send_message(sender_id, "Please insert your info after /info")
         return
 
     user_info = ' '.join(words[1:])

@@ -35,6 +35,11 @@ def get_perm_memory(user_id: int) -> str:
 
 def summarize_memory(user_id: int) -> str:
     if user_id in temp_memory:
-        recent_messages = [msg[0] for msg in temp_memory[user_id][-5:]]
-        return "\n".join(recent_messages)
+        interactions = temp_memory[user_id]
+        summary = []
+        for index, interaction in enumerate(interactions):
+            question = interaction['question']
+            response = interaction['response']
+            summary.append(f"{index + 1}- User's question: {question}\nAI's response: {response}")
+        return "\n".join(summary)
     return ""
