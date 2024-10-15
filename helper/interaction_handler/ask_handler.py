@@ -1,16 +1,10 @@
 # Helper/interaction_handler/ask_handler.py
 
-from helper.openai_api import text_completion, create_prompt
+from helper.openai_api import text_completion, create_prompt, persona_prompt
 from helper.telegram_api import send_message
 from helper.memory import add_temp_memory, get_perm_memory
 from helper.memory import get_temp_memory, summarize_memory, clear_temp_memory
 import logging
-
-persona_prompt = (
-    "Your name is *AI CHATBOT TELEGRAM (DEMO),"
-    "a friendly and approachable assistant"
-    "َAlways translate the answer into farsi!\n\n"
-)
 
 
 def handle_ask_command(

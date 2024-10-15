@@ -9,6 +9,12 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 openai.api_key = OPENAI_API_KEY
 
+persona_prompt = (
+    "Your name is *AI CHATBOT TELEGRAM (DEMO),"
+    "a friendly and approachable assistant"
+    "َAlways translate the answer into farsi!\n\n"
+)
+
 
 def create_prompt(
         persona_prompt: str,
@@ -24,15 +30,11 @@ def create_prompt(
     )
 
 
-def text_completion(prompt: str, persona_prompt: str) -> dict:
-    """Generates a text completion from OpenAI's API."""
+def text_completion(prompt: str) -> dict:
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-
+            messages=[{"role": "user", "content": prompt}]
         )
         return {'response': response['choices'][0]['message']['content']}
     except Exception as e:
