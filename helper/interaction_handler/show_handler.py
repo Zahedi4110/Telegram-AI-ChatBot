@@ -12,14 +12,14 @@ def handle_show_command(sender_id: int):
 
     # Prepare messages to send to the user
     if temp_memory:
-        temp_memory_message = f"User's Info:\n{temp_memory}"
+        temp_memory_message = f"*Temporary Memory:*\n{temp_memory}"
     else:
-        temp_memory_message = "User's Info:\nNo info memory recorded."
+        temp_memory_message = "*Temporary Memory:*\nNo temporary memory recorded."
 
     if perm_memory:
-        perm_memory_message = f"Memory Status:\n{perm_memory}"
+        perm_memory_message = f"*Permanent Memory:*\n{perm_memory}"
     else:
-        perm_memory_message = "Memory Status:\nNo memory recorded."
+        perm_memory_message = "*Permanent Memory:*\nNo permanent memory recorded."
 
     # Send the memory information to the user
     send_message(sender_id, temp_memory_message)

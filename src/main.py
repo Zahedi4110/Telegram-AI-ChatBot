@@ -8,8 +8,8 @@ from helper.interaction_handler.ask_handler import handle_ask_command
 from helper.interaction_handler.img_handler import handle_img_command
 from helper.interaction_handler.clean_handler import handle_clean_command
 from helper.interaction_handler.info_handler import handle_info_command
-# handle_user_message
 from helper.interaction_handler.show_handler import handle_show_command
+
 # Load messages from JSON file
 with open('messages.json', 'r', encoding='utf-8') as f:
     messages = json.load(f)
