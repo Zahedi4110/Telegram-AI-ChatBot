@@ -1,5 +1,3 @@
-# Helper/openai_api.py
-
 import os
 import openai
 from dotenv import load_dotenv
@@ -9,19 +7,8 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 openai.api_key = OPENAI_API_KEY
 
-persona_prompt = (
-    "Your name is *AI CHATBOT TELEGRAM (DEMO),"
-    "a friendly and approachable assistant"
-    "َAlways translate the answer into farsi!\n\n"
-)
 
-
-def create_prompt(
-        persona_prompt: str,
-        user_info: str,
-        user_history: str,
-        user_query: str) -> str:
-
+def create_prompt(persona_prompt: str, user_info: str, user_history: str, user_query: str) -> str:
     return (
         f"{persona_prompt}\n"
         f"User's Info:\n{user_info}\n"
@@ -42,7 +29,6 @@ def text_completion(prompt: str) -> dict:
 
 
 def generate_image(prompt: str) -> dict:
-    """Generates an image based on the prompt using OpenAI's API."""
     try:
         response = openai.Image.create(
             prompt=prompt,
