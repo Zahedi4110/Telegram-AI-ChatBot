@@ -5,7 +5,7 @@ from helper.memory import get_temp_memory, summarize_memory, clear_temp_memory
 import logging
 
 persona_prompt = (
-    "Your name is *AI CHATBOT TELEGRAM (DEMO),"
+    "Your name is *AI CHATBOT (DEMO),"
     "a friendly and approachable assistant"
     "َAlways translate the answer into farsi!\n\n"
 )
@@ -36,13 +36,13 @@ def handle_ask_command(
     # افزایش شمارش تعاملات
     interaction_count[sender_id] += 1
 
+
     # بررسی تعداد تعاملات
     if interaction_count[sender_id] % 5 == 0:
-        summary = summarize_memory(sender_id)
-        if summary:
-            clear_temp_memory(sender_id)  # Clear the temporary memory after summarizing
-            add_temp_memory(sender_id, summary)  # Add the summary back to temp_memory
-            send_message(sender_id, "حافظه با خلاصه به‌روزرسانی شد.")
-            logging.info(f"Updated Memory:\n{summary}\n")
-        else:
-            send_message(sender_id, "نمی‌توان حافظه را خلاصه کرد!")
+        clear_temp_memory(sender_id)
+        update_message = summarize_memory(sender_id)
+        send_message(sender_id, update_message)
+        send_message(sender_id, "حافظه با خلاصه به‌روزرسانی شد.")
+        logging.info(f"Updated Memory:\n{update_message}\n")
+    else:
+        send_message(sender_id, "نمی‌توان حافظه را خلاصه کرد!")
