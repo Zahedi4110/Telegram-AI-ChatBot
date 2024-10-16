@@ -7,6 +7,7 @@ temp_memory = {}
 perm_memory = {}
 MSG_EXPIRATION = 3600  # 1 hour expiration time for temporary memory
 
+
 def add_temp_memory(user_id: int, message: str) -> None:
     if user_id not in temp_memory:
         temp_memory[user_id] = []
@@ -51,13 +52,15 @@ def summarize_memory(user_id: int) -> str:
         )
         
         # فراخوانی API OpenAI برای دریافت خلاصه
-        summary_response = text_completion(summary_prompt)  # Ensure this call is correct
+        summary_response = text_completion(summary_prompt)
         
         # بررسی پاسخ API و جایگزینی حافظه موقتی
         if 'response' in summary_response:
             # جایگزینی حافظه موقتی با خلاصه
             clear_temp_memory(user_id)  # پاک کردن حافظه موقتی قبلی
-            add_temp_memory(user_id, {'question': "Summary", 'response': summary_response['response']})  # اضافه کردن خلاصه به حافظه موقتی
+            add_temp_memory(
+                user_id, {'question': "Summary",
+                          'response': summary_response['response']})
             return "Memory Updating..."
     
     return "Can't Update Memory"
