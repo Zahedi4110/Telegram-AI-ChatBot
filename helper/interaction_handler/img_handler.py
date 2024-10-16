@@ -25,3 +25,4 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
         send_message(sender_id, response['url'])
 
     send_message(sender_id, messages["DEFAULT_IMAGE_RESPONSE"])
+

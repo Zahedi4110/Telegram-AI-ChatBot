@@ -16,9 +16,11 @@ def add_temp_memory(user_id: int, message: str) -> None:
 def clear_temp_memory(user_id: int) -> None:
     temp_memory.pop(user_id, None)
 
+
 def get_temp_memory(user_id: int) -> str:
     cleanup_temp_memory(user_id)
     return "\n".join([msg[0] for msg in temp_memory.get(user_id, [])])
+
 
 def cleanup_temp_memory(user_id: int) -> None:
     if user_id in temp_memory:
@@ -30,13 +32,26 @@ def cleanup_temp_memory(user_id: int) -> None:
         if not temp_memory[user_id]:
             clear_temp_memory(user_id)
 
+
+
 def add_perm_memory(user_id: int, info: str) -> None:
     perm_memory[user_id] = info
+
 
 def get_perm_memory(user_id: int) -> str:
     return perm_memory.get(user_id, "")
 
 
+
+def summarize_memory(user_id: int) -> str:
+    if user_id in temp_memory:
+        recent_messages = [msg[0] for msg in temp_memory[user_id][-5:]]
+        return "\n".join(recent_messages)
+    return ""
+
+
+
+'''
 def summarize_memory(user_id: int) -> str:
     """خلاصه‌سازی حافظه کاربر با استفاده از API OpenAI."""
     # دریافت محتوای حافظه موقتی کاربر
@@ -65,19 +80,4 @@ def summarize_memory(user_id: int) -> str:
     
     return "Can't Update Memory"
 
-
-'''
-
-def summarize_memory(user_id: int) -> str:
-    if user_id in temp_memory:
-        interactions = temp_memory[user_id]
-        logging.info(f"Current interactions for user {user_id}: {interactions}")
-
-        summary = []
-        for index, interaction in enumerate(interactions):
-            question = interaction['question']
-            response = interaction['response']
-            summary.append(f"{index + 1}- User's question: {question}\nAI's response: {response}")
-        return "\n".join(summary)
-    return ""
 '''
