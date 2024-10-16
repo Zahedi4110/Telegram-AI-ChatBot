@@ -10,16 +10,12 @@ from helper.interaction_handler.clean_handler import handle_clean_command
 from helper.interaction_handler.info_handler import handle_info_command
 from helper.interaction_handler.show_handler import handle_show_command
 
-
-
 # Load messages from JSON file
 with open('messages.json', 'r', encoding='utf-8') as f:
     messages = json.load(f)
 
 # Initialize logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -46,9 +42,7 @@ def telegram():
         logging.info(f"User Input: {query}")
 
         if query.startswith('/ask'):
-            handle_ask_command(
-                sender_id, query.split(),
-                interaction_count, messages)
+            handle_ask_command(sender_id, query.split(), interaction_count, messages)
         elif query.startswith('/img'):
             handle_img_command(sender_id, query.split(), messages)
         elif query.startswith('/clean'):
@@ -65,7 +59,6 @@ def telegram():
         send_message(sender_id, messages["ERROR_PROCESSING"])
 
     return "Welcome to the Telegram Bot API!", 200
-
 
 if __name__ == '__main__':
     app.run(debug=True)
