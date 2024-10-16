@@ -6,8 +6,8 @@ import logging
 
 persona_prompt = (
     "Your name is *AI CHATBOT (DEMO),"
-    "a friendly and approachable assistant"
-    "َAlways translate the answer into farsi!\n\n"
+    "a friendly and approachable assistant."
+    " Always translate the answer into Farsi!\n\n"
 )
 
 def handle_ask_command(
@@ -26,21 +26,28 @@ def handle_ask_command(
     # Log the current state for debugging
     logging.info(f"Sender ID: {sender_id}, Words: {words}, Interaction Count: {interaction_count}")
 
-    # ساخت پرامپت کامل برای OpenAI
+    # Constructing the full prompt for OpenAI
     full_prompt = create_prompt(
         persona_prompt, user_info, user_history, current_query)
 
-    # ارسال پرامپت به OpenAI
+    # Sending the prompt to OpenAI
     response = text_completion(full_prompt)
-    send_message(sender_id, response['response'])
+    
+    # Check if response contains 'response' key
+    if 'response' in response:
+        send_message(sender_id, response['response'])
+    else:
+        logging.error("Response from OpenAI does not contain 'response' key.")
+        send_message(sender_id, "An error occurred while processing your request.")
 
-    # ذخیره ورودی و پاسخ در temp_memory
+    # Store input and response in temp_memory
     add_temp_memory(
-        sender_id, {'question': current_query, 'response': response['response']})
+        sender_id, {'question': current_query, 'response': response.get('response', 'No response')})
 
-    # افزایش شمارش تعاملات
+    # Increase interaction count
     interaction_count[sender_id] += 1
-    # بررسی تعداد تعاملات
+
+    # Check interaction count for summarization
     if interaction_count[sender_id] % 5 == 0:
         user_history = summarize_memory(sender_id)
         send_message(sender_id, user_history)

@@ -26,6 +26,30 @@ app = Flask(__name__)
 interaction_count = {}
 
 
+@app.route('/telegram', methods=['POST'])
+def telegram():
+    data = request.json
+    logging.info(f"Incoming data: {data}")
+
+    # Check if 'message' key is in the incoming data
+    if 'message' in data:
+        message = data['message']
+        sender_id = message['from']['id']
+        user_input = message.get('text', '')
+
+        # Process the command
+        if user_input.startswith('/ask'):
+            words = user_input.split()
+            handle_ask_command(sender_id, words, interaction_count, messages)
+        # Handle other commands...
+    else:
+        logging.error("Key 'message' not found in incoming data.")
+        return "Error: 'message' key not found", 400
+
+    return "OK", 200
+
+
+'''
 @app.route('/telegram', methods=['POST', 'GET'])
 def telegram():
     """Handles incoming messages from Telegram and responds accordingly."""
@@ -67,3 +91,4 @@ def telegram():
 
 if __name__ == '__main__':
     app.run(debug=True)
+'''
