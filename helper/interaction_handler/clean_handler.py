@@ -1,4 +1,4 @@
-# Helper/interaction_handler/clean_handler.py
+# Helper/interaction_handler/clean_handler.py:
 
 from helper.telegram_api import send_message
 from helper.memory import clear_temp_memory, get_temp_memory

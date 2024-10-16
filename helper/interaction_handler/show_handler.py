@@ -1,4 +1,4 @@
-# Helper/interaction_handler/show_handler.py
+# Helper/interaction_handler/show_handler.py:
 
 from helper.telegram_api import send_message
 from helper.memory import get_temp_memory, get_perm_memory

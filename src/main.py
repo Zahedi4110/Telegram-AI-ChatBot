@@ -1,4 +1,4 @@
-# src/main.py
+# src/main.py:
 
 import logging
 import json
@@ -55,7 +55,7 @@ def telegram():
             handle_info_command(sender_id, query.split(), messages)
 
         elif query.startswith('/show'):
-            handle_show_command(sender_id) 
+            handle_show_command(sender_id)
 
         else:
             send_message(sender_id, messages["UNRECOGNIZED_COMMAND"])

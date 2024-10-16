@@ -1,4 +1,4 @@
-# Helper/openai_api.py
+# Helper/openai_api.py:
 
 import os
 import openai

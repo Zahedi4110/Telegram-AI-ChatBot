@@ -1,4 +1,4 @@
-# Helper/interaction_handler/ask_handler.py
+# Helper/interaction_handler/ask_handler.py:
 
 from helper.openai_api import text_completion
 from helper.telegram_api import send_message

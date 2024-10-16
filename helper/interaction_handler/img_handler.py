@@ -1,4 +1,4 @@
-# Helper/interaction_handler/img_handler.py
+# Helper/interaction_handler/img_handler.py:
 
 from helper.openai_api import generate_image
 from helper.telegram_api import send_message, send_photo
