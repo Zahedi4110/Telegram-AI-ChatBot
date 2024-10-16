@@ -35,14 +35,9 @@ def handle_ask_command(
 
     # افزایش شمارش تعاملات
     interaction_count[sender_id] += 1
-
-
     # بررسی تعداد تعاملات
     if interaction_count[sender_id] % 5 == 0:
-        clear_temp_memory(sender_id)
         update_message = summarize_memory(sender_id)
         send_message(sender_id, update_message)
         send_message(sender_id, "حافظه با خلاصه به‌روزرسانی شد.")
         logging.info(f"Updated Memory:\n{update_message}\n")
-    else:
-        send_message(sender_id, "نمی‌توان حافظه را خلاصه کرد!")
