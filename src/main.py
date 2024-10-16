@@ -53,8 +53,8 @@ def telegram():
             handle_clean_command(sender_id, messages)
         elif query.startswith('/info'):
             handle_info_command(sender_id, query.split(), messages)
-        elif query.startswith('/show'):  # Check for the /show command
-            handle_show_command(sender_id)  # Call the show handler
+        elif query.startswith('/show'):
+            handle_show_command(sender_id)
         else:
             send_message(sender_id, messages["UNRECOGNIZED_COMMAND"])
 
