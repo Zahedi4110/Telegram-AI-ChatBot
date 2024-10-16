@@ -10,11 +10,14 @@ persona_prompt = (
     " Always translate the answer into Farsi!\n\n"
 )
 
+
 def handle_ask_command(
         sender_id: int, words: list, interaction_count: dict, messages: dict):
     if len(words) < 2:
         if "Len<2" in messages:
             send_message(sender_id, messages["Len<2"])
+            logging.info(f"Current query: {current_query}")
+
         else:
             logging.error("Key 'Len<2' not found in messages dictionary.")
         return
@@ -29,10 +32,13 @@ def handle_ask_command(
     # Constructing the full prompt for OpenAI
     full_prompt = create_prompt(
         persona_prompt, user_info, user_history, current_query)
+    logging.info(f"Full prompt sent to OpenAI: {full_prompt}")
+
 
     # Sending the prompt to OpenAI
     response = text_completion(full_prompt)
-    
+    logging.info(f"Response from OpenAI: {response}")
+
     # Check if response contains 'response' key
     if 'response' in response:
         send_message(sender_id, response['response'])
