@@ -23,10 +23,12 @@ def handle_ask_command(
     user_info = get_perm_memory(sender_id)
     user_history = get_temp_memory(sender_id)
 
-    full_prompt = f"Persona of the AI:\n{persona_prompt}\nUser's Info:\n{user_info}\nPrevious Interactions:\n {user_history}\n\nThe Question:\n{current_query}"
+    full_prompt = f"Persona of the AI:\n{persona_prompt}\nUser's Info:\n"
+    f"{user_info}\nPrevious Interactions:\n {user_history}"
+    f"\n\nThe Question:\n{current_query}"
 
     add_temp_memory(sender_id, current_query)
-    response = text_completion(full_prompt, persona_prompt)
+    response = text_completion(full_prompt)
     send_message(sender_id, response['response'])
 
     if interaction_count[sender_id] % 5 == 0:
@@ -38,5 +40,3 @@ def handle_ask_command(
             logging.info(f"Updated Memory:\n{summary}\n")
         else:
             send_message(sender_id, "Can't summarize memory!")
-
-

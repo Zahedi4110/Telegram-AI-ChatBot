@@ -16,7 +16,9 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
     user_info = get_perm_memory(sender_id)
     user_history = get_temp_memory(sender_id)
 
-    formatted_prompt = f"{user_info}\n{user_history}\nUser's Image Request: {query}"
+    formatted_prompt = f"{user_info}\n{user_history}"
+    f"\nUser's Image Request: {query}"
+
     response = generate_image(formatted_prompt)
 
     if response['status'] == 1:
@@ -25,4 +27,3 @@ def handle_img_command(sender_id: int, words: list, messages: dict):
         send_message(sender_id, response['url'])
 
     send_message(sender_id, messages["DEFAULT_IMAGE_RESPONSE"])
-

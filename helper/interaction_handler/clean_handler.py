@@ -11,6 +11,7 @@ def handle_clean_command(sender_id: int, messages: dict):
             sender_id, f"Summary of cleared memory:\n{previous_memory}")
         clear_temp_memory(sender_id)
         send_message(sender_id, messages["MEMORY_CLEARED"])
+
     else:
         send_message(sender_id, messages["NO_CONVERSATION"])
     send_message(sender_id, messages["CLEAN_START"])
