@@ -18,6 +18,8 @@ def handle_ask_command(
     if len(words) < 2:
         send_message(sender_id, messages["Len<2"])
         return
+    else:
+        send_message(sender_id, "Add your question after /ask")
 
     current_query = ' '.join(words[1:])
     user_info = get_perm_memory(sender_id)

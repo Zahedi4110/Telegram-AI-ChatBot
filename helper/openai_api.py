@@ -16,6 +16,7 @@ def text_completion(prompt: str) -> dict:
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
+                {"role": "system", "content": "Your name is *AI CHATBOT TELEGRAM (DEMO), a friendly and approachable assistant, Always answer in farsi!" }
             ]
 
         )
